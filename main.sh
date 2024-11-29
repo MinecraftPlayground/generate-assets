@@ -45,6 +45,10 @@ curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.
   echo "Saved \"$url\" to \"$destination\"."
 done
 
-ls -al "$TEMP_DOWNLOAD_DIR/generated/assets"
+echo "Copying generated files to $INPUT_PATH"
+mkdir -p "$INPUT_PATH"
+cp -r "$TEMP_DOWNLOAD_DIR/generated/*" "$INPUT_PATH"
+
+echo "Files copied to $INPUT_PATH"
 
 exit 0
