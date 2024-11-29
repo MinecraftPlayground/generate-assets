@@ -32,14 +32,14 @@ outputs:
 
 runs:
   using: "composite"
-  env:
-    VERSION: ${{ inputs.version }}
-    PATH: ${{ inputs.path }}
-    MANIFEST_URL: ${{ inputs.api-url }}
-
   steps:
     - name: 'Setup'
       id: 'setup'
+      env:
+        VERSION: ${{ inputs.version }}
+        PATH: ${{ inputs.path }}
+        MANIFEST_URL: ${{ inputs.api-url }}
+
       run: |
         echo "Make temp download directory."
         echo "TEMP_DOWNLOAD_DIR=$(mktemp -d)" >> "$GITHUB_OUTPUT"
@@ -75,6 +75,7 @@ runs:
       env:
         TEMP_DOWNLOAD_DIR: ${{ steps.setup.outputs.TEMP_DOWNLOAD_DIR }}
         PACKAGE_URL: ${{ steps.setup.outputs.PACKAGE_URL }}
+        RESOURCES_URL: ${{ inputs.resources-url }}
 
       run: |
         echo "Fetch asset index URL from \"$PACKAGE_URL\""
@@ -88,7 +89,7 @@ runs:
           
           first_hex="${hash:0:2}"
 
-          url="https://resources.download.minecraft.net/$first_hex/$hash"
+          url="$RESOURCES_URL/$first_hex/$hash"
 
           destination="$assets_path/$path"
 
