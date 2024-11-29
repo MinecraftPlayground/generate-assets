@@ -42,6 +42,7 @@ runs:
         MANIFEST_URL: ${{ inputs.api-url }}
 
       run: |
+        apt-get install mktemp curl jq
         echo "Make temp download directory."
         echo "TEMP_DOWNLOAD_DIR=$(mktemp -d)" >> "$GITHUB_OUTPUT"
 
