@@ -25,8 +25,6 @@ asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 echo "::group:: Downloading additional assets from \"$asset_index_url\"."
 assets_path="$INPUT_PATH/assets"
 
-count=0
-
 curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
   
   mkdir -p "$assets_path/$(dirname $path)"
@@ -38,7 +36,6 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
   destination="$assets_path/$path"
 
   if curl -f -s -o "$destination" "$url"; then
-    $((count++))
     echo "Saved \"$url\" to \"$destination\"."
   else
     echo "Failed to download \"$url\"."
@@ -46,6 +43,5 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
 done
 
 echo "::endgroup::"
-echo "Total files saved: $count"
 
 exit 0
