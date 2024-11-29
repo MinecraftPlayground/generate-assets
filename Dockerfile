@@ -1,5 +1,5 @@
 # Container image that runs your code
-FROM alpine:3.20
+FROM ubuntu:22.04
 
 # Set the working directory inside the container
 WORKDIR /usr/src
