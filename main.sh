@@ -13,15 +13,16 @@ echo "Downloading client.jar from \"$jar_url\"."
 curl -L -o $TEMP_DOWNLOAD_DIR/client.jar $jar_url
 
 echo "Saved \"client.jar\" to \"$TEMP_DOWNLOAD_DIR\"."
-
-echo "Extract assets from client.jar"
+  
+echo "::group:: Extract assets from client.jar"
 unzip $TEMP_DOWNLOAD_DIR/client.jar "pack.png" -d "$INPUT_PATH"
 unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH"
+echo "::endgroup::"
 
 echo "Fetch asset index URL from \"$package_url\"."
 asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 
-echo "Downloading additional assets from \"$asset_index_url\"."
+echo "::group:: Downloading additional assets from \"$asset_index_url\"."
 assets_path="$INPUT_PATH/assets"
 
 count=0
@@ -37,13 +38,14 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
   destination="$assets_path/$path"
 
   if curl -f -s -o "$destination" "$url"; then
-    count=$((count + 1))
+    count=$(($count + 1))
     echo "Saved \"$url\" to \"$destination\"."
   else
     echo "Failed to download \"$url\"."
   fi
 done
 
+echo "::endgroup::"
 echo "Total files saved: $count"
 
 exit 0
