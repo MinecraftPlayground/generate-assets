@@ -31,7 +31,8 @@ outputs:
     value: ${{ steps.random-number-generator.outputs.random-number }}
 
 runs:
-  using: "composite"
+  using: 'docker'
+  image: 'docker://ubuntu:latest'
   steps:
     - name: 'Setup'
       id: 'setup'
@@ -42,7 +43,6 @@ runs:
         MANIFEST_URL: ${{ inputs.api-url }}
 
       run: |
-        apt-get install mktemp curl jq
         echo "Make temp download directory."
         echo "TEMP_DOWNLOAD_DIR=$(mktemp -d)" >> "$GITHUB_OUTPUT"
 
