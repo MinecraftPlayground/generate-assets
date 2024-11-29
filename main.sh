@@ -21,7 +21,7 @@ echo "Extract assets from client.jar"
 mkdir -p "$TEMP_DOWNLOAD_DIR/generated"
         
 unzip $TEMP_DOWNLOAD_DIR/client.jar "pack.png" -d "$INPUT_PATH"
-unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH/assets"
+unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH"
 
 
 echo "Fetch asset index URL from \"$package_url\""
