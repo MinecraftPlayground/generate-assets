@@ -28,8 +28,8 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.version }}
-    - ${{ inputs.path }}
-    - ${{ inputs.api-url }}
-    - ${{ inputs.resources-url }}
+  env:
+    INPUT_VERSION: ${{ inputs.version }}
+    INPUT_PATH: ${{ inputs.path }}
+    INPUT_MANIFEST_API_URL: ${{ inputs.api-url }}
+    INPUT_RESOURCES_API_URL: ${{ inputs.resources-url }}

@@ -1,8 +1,11 @@
 # Container image that runs your code
 FROM ubuntu:22.04
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY main.sh /entrypoint.sh
+# Set the working directory inside the container
+WORKDIR /usr/src
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+# Copy any source file(s) required for the action
+COPY main.sh .
+
+# Configure the container to be run as an executable
+ENTRYPOINT ["/usr/src/main.sh"]

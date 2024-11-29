@@ -1,13 +1,8 @@
-VERSION=$1
-PATH=$2
-MANIFEST_API_URL=$3
-RESOURCES_API_URL=$4
-
 echo "Make temp download directory."
 TEMP_DOWNLOAD_DIR=$(mktemp -d)
 
 echo "Fetch package URL."
-package_url=$(curl -L $MANIFEST_API_URL | jq -r ".VERSIONs[] | select(.id == \"$VERSION\") | .url")
+package_url=$(curl -L $INPUT_MANIFEST_API_URL | jq -r ".versions[] | select(.id == \"$INPUT_VERSION\") | .url")
 
 
 
@@ -39,7 +34,7 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
   
   first_hex="${hash:0:2}"
 
-  url="$RESOURCES_API_URL/$first_hex/$hash"
+  url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
 
   destination="$assets_path/$PATH"
 
