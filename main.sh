@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Make temp download directory."
 TEMP_DOWNLOAD_DIR=$(mktemp -d)
