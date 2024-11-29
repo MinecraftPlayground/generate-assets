@@ -3,6 +3,11 @@ on:
   push:
     branches: ['main']
 
+permissions:
+  contents: write
+  actions: read
+  checks: write
+
 jobs:
   test_action:
     runs-on: ubuntu-latest
