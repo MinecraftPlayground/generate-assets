@@ -47,7 +47,7 @@ echo "::endgroup::"
 echo "::group:: Iterate over downloaded files to find and unzip ZIP files."
 
 find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
-  unzip_dir="${zipfile}"
+  unzip_dir="${zipfile%.zip}"
   
   echo "Unzipping \"$zipfile\" to \"$unzip_dir\"."
   
