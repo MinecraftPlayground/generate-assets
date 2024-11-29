@@ -10,4 +10,4 @@ RUN chmod +x /usr/src/main.sh
 
 RUN ls -al /usr/src
 # Configure the container to be run as an executable
-ENTRYPOINT ["bash", "/usr/src/main.sh"]
+ENTRYPOINT ["/usr/src/main.sh"]
