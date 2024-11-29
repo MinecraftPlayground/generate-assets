@@ -38,7 +38,7 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
   destination="$assets_path/$path"
 
   if curl -f -s -o "$destination" "$url"; then
-    count=$(($count + 1))
+    count=$($count + 1)
     echo "Saved \"$url\" to \"$destination\"."
   else
     echo "Failed to download \"$url\"."
