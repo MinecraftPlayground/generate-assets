@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Make temp download directory."
 TEMP_DOWNLOAD_DIR=$(mktemp -d)
 
