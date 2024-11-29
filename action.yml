@@ -32,10 +32,10 @@ outputs:
 
 runs:
   using: "composite"
-  shell: 'bash'
   steps:
     - name: 'Setup'
       id: 'setup'
+      shell: 'bash'
       env:
         VERSION: ${{ inputs.version }}
         PATH: ${{ inputs.path }}
@@ -49,6 +49,7 @@ runs:
         echo "PACKAGE_URL=$(curl -L $MANIFEST_URL | jq -r \".versions[] | select(.id == \\"$VERSION\\") | .url\")"
 
     - name: 'Download client.jar'
+      shell: 'bash'
       env:
         TEMP_DOWNLOAD_DIR: ${{ steps.setup.outputs.TEMP_DOWNLOAD_DIR }}
         PACKAGE_URL: ${{ steps.setup.outputs.PACKAGE_URL }}
@@ -63,6 +64,7 @@ runs:
         echo "Saved client.jar to \"$TEMP_DOWNLOAD_DIR\"."
 
     - name: 'Extract assets from client.jar'
+      shell: 'bash'
       env:
         TEMP_DOWNLOAD_DIR: ${{ steps.setup.outputs.TEMP_DOWNLOAD_DIR }}
 
@@ -73,6 +75,7 @@ runs:
         unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$TEMP_DOWNLOAD_DIR/generated"
 
     - name: 'Download additional assets'
+      shell: 'bash'
       env:
         TEMP_DOWNLOAD_DIR: ${{ steps.setup.outputs.TEMP_DOWNLOAD_DIR }}
         PACKAGE_URL: ${{ steps.setup.outputs.PACKAGE_URL }}
@@ -100,6 +103,7 @@ runs:
         done
     
     - name: 'List temp'
+      shell: 'bash'
       env:
         TEMP_DOWNLOAD_DIR: ${{ steps.setup.outputs.TEMP_DOWNLOAD_DIR }}
       
