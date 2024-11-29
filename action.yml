@@ -32,6 +32,7 @@ outputs:
 
 runs:
   using: "composite"
+  shell: 'bash'
   steps:
     - name: 'Setup'
       id: 'setup'
