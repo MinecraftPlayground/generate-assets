@@ -44,4 +44,24 @@ done
 
 echo "::endgroup::"
 
+echo "::group:: Iterate over downloaded files to find and unzip ZIP files."
+
+find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
+  unzip_dir="${zipfile%.zip}"
+  
+  echo "Unzipping \"$zipfile\" to \"$unzip_dir\"."
+  
+  mkdir -p "$unzip_dir"
+  
+  if unzip -o "$zipfile" -d "$unzip_dir"; then
+    echo "Successfully unzipped \"$zipfile\"."
+  else
+    echo "Failed to unzip \"$zipfile\"."
+  fi
+done
+
+echo "::endgroup::"
+
+echo "All ZIP files processed."
+
 exit 0
