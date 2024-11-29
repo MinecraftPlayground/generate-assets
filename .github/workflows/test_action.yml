@@ -13,4 +13,11 @@ jobs:
       - name: 'Test'
         uses: ./
         with:
+          path: './default'
           version: '1.21.3'
+      
+      - name: 'Upload generated assets'
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'default'
+          path: './default'
