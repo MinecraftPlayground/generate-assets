@@ -42,8 +42,6 @@ curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.ha
   else
     echo "Failed to download \"$url\"."
   fi
-
-  echo "Saved \"$url\" to \"$destination\"."
 done
 
 echo "Total files saved: $count"
