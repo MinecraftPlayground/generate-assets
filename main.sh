@@ -27,19 +27,19 @@ asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 
 assets_path=$(mkdir -p "$TEMP_DOWNLOAD_DIR/generated/assets")
 
-curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
+curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
   
-  mkdir -p "$assets_path/$(dirname $PATH)"
+  mkdir -p "$assets_path/$(dirname $path)"
   
   first_hex="${hash:0:2}"
 
   url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
 
-  destination="$assets_path/$PATH"
+  destination="$assets_path/$path"
 
-  curl -s -o "$destination" "$url"
+  curl -f -s -o "$destination" "$url" || echo "Failed to download $url"
 
-  echo "Saved \"$url\"" to \"$destination\"."
+  echo "Saved \"$url\" to \"$destination\"."
 done
 
 ls -al $TEMP_DOWNLOAD_DIR
