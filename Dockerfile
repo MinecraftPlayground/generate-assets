@@ -1,5 +1,5 @@
 # Container image that runs your code
-FROM ubuntu:22
+FROM ubuntu:22.04
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY main.sh /main.sh
