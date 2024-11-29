@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./
+      - name: 'Test'
+        uses: ./
         with:
           version: '1.21.3'
