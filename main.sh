@@ -27,7 +27,8 @@ unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$TEMP_DOWNLOAD_DIR/generated"
 echo "Fetch asset index URL from \"$package_url\""
 asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 
-assets_path=$(mkdir -p "$TEMP_DOWNLOAD_DIR/generated/assets")
+assets_path="$TEMP_DOWNLOAD_DIR/generated/assets"
+mkdir -p "$assets_path"
 
 curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
   
@@ -44,6 +45,6 @@ curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.
   echo "Saved \"$url\" to \"$destination\"."
 done
 
-ls -al $TEMP_DOWNLOAD_DIR
+ls -al "$TEMP_DOWNLOAD_DIR/generated/assets"
 
 exit 0
