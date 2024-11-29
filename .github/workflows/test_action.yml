@@ -17,7 +17,8 @@ jobs:
           version: '1.21.3'
       
       - name: 'Upload generated assets'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: 'default'
           path: './default'
+          compression-level: 9
