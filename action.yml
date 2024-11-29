@@ -27,11 +27,9 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ubuntu:latest'
+  image: 'Dockerfile'
   args:
     - ${{ inputs.version }}
     - ${{ inputs.path }}
     - ${{ inputs.api-url }}
     - ${{ inputs.resources-url }}
-
-  entrypoint: 'main.sh'
