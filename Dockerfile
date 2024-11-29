@@ -1,9 +1,13 @@
 # Container image that runs your code
 FROM cdue/curl-zip-jq:latest
 
-# Copy any source file(s) required for the action
-COPY main.sh /main.sh
-RUN chmod +x main.sh
+# Set the working directory inside the container
+WORKDIR /usr/src
 
+# Copy any source file(s) required for the action
+COPY ./main.sh .
+RUN chmod +x /usr/src/main.sh
+
+RUN ls -al /usr/src
 # Configure the container to be run as an executable
-ENTRYPOINT ["/main.sh"]
+ENTRYPOINT ["/usr/src/main.sh"]
