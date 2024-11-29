@@ -46,7 +46,8 @@ runs:
         echo "TEMP_DOWNLOAD_DIR=$(mktemp -d)" >> "$GITHUB_OUTPUT"
 
         echo "Fetch package URL."
-        echo "PACKAGE_URL=$(curl -L $MANIFEST_URL | jq -r \".versions[] | select(.id == \\"$VERSION\\") | .url\")"
+        package_url=$(curl -L $MANIFEST_URL | jq -r ".versions[] | select(.id == \"$VERSION\") | .url")
+        echo "PACKAGE_URL=$package_url" >> "$GITHUB_OUTPUT"
 
     - name: 'Download client.jar'
       shell: 'bash'
