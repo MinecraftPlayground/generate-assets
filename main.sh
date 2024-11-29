@@ -3,10 +3,8 @@
 echo "Make temp download directory."
 TEMP_DOWNLOAD_DIR=$(mktemp -d)
 
-echo "Fetch package URL."
+echo "Fetch package URL from \"$INPUT_MANIFEST_API_URL\"."
 package_url=$(curl -L $INPUT_MANIFEST_API_URL | jq -r ".versions[] | select(.id == \"$INPUT_VERSION\") | .url")
-
-
 
 echo "Fetch client.jar URL from \"$package_url\"."
 jar_url=$(curl -L $package_url | jq -r ".downloads.client.url")
@@ -14,22 +12,21 @@ jar_url=$(curl -L $package_url | jq -r ".downloads.client.url")
 echo "Downloading client.jar from \"$jar_url\"."
 curl -L -o $TEMP_DOWNLOAD_DIR/client.jar $jar_url
 
-echo "Saved client.jar to \"$TEMP_DOWNLOAD_DIR\"."
-
+echo "Saved \"client.jar\" to \"$TEMP_DOWNLOAD_DIR\"."
 
 echo "Extract assets from client.jar"
-mkdir -p "$TEMP_DOWNLOAD_DIR/generated"
-        
 unzip $TEMP_DOWNLOAD_DIR/client.jar "pack.png" -d "$INPUT_PATH"
 unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH"
 
-
-echo "Fetch asset index URL from \"$package_url\""
+echo "Fetch asset index URL from \"$package_url\"."
 asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 
+echo "Downloading additional assets from \"$asset_index_url\"."
 assets_path="$INPUT_PATH/assets"
 
-curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
+count=0
+
+curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
   
   mkdir -p "$assets_path/$(dirname $path)"
   
@@ -39,9 +36,16 @@ curl -L "$asset_index_url" | jq -r '.objects | to_entries[] | "\(.key) \(.value.
 
   destination="$assets_path/$path"
 
-  curl -f -s -o "$destination" "$url" || echo "Failed to download $url"
+  if curl -f -s -o "$destination" "$url"; then
+    count=$((count + 1))
+    echo "Saved \"$url\" to \"$destination\"."
+  else
+    echo "Failed to download \"$url\"."
+  fi
 
   echo "Saved \"$url\" to \"$destination\"."
 done
+
+echo "Total files saved: $count"
 
 exit 0
