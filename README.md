@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: 'Download assets to "./default_assets".'
         id: download_assets
-        uses: MinecraftPlayground/generate-assets
+        uses: MinecraftPlayground/generate-assets@v1.0.0
         with:
           version: 1.21.2
           default: './default_assets'
