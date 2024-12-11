@@ -2,7 +2,7 @@ name: 'Generate Assets'
 description: 'Generate Minecraft default resourcepack assets.'
 author: 'Mqxx'
 branding:
-  icon: 'folder'
+  icon: 'file'
   color: 'green'
 
 inputs:
