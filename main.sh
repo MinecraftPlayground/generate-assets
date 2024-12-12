@@ -58,6 +58,10 @@ find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
   else
     echo "Failed to unzip \"$zipfile\"."
   fi
+
+  echo "Removing \"$zipfile\"."
+  
+  rm $zipfile
 done
 
 echo "::endgroup::"
