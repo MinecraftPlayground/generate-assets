@@ -1,5 +1,20 @@
 #!/bin/sh
 
+if [ "$INPUT_VERSION" == "latest" ]; then
+  echo "Fetching the latest snapshot version."
+  latest_version=$(curl -L $INPUT_MANIFEST_API_URL | jq -r '.latest.snapshot')
+
+  if [ -z "$latest_version" ]; then
+    echo "Error: Could not find the latest snapshot version in the manifest."
+    exit 1
+  fi
+
+  echo "Using latest version: $latest_version"
+  INPUT_VERSION="$latest_version"
+else
+  echo "Using specified version: $INPUT_VERSION"
+fi
+
 echo "Make temp download directory."
 TEMP_DOWNLOAD_DIR=$(mktemp -d)
 
