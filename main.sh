@@ -41,11 +41,33 @@ echo "Downloading client.jar from \"$jar_url\"."
 curl -L -o $TEMP_DOWNLOAD_DIR/client.jar $jar_url
 
 echo "Saved \"client.jar\" to \"$TEMP_DOWNLOAD_DIR\"."
-  
-echo "::group:: Extract assets from client.jar"
-unzip $TEMP_DOWNLOAD_DIR/client.jar "pack.png" -d "$INPUT_PATH"
-unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH"
+
+
+echo "::group:: Parallel extract assets from client.jar"
+
+unzip "$TEMP_DOWNLOAD_DIR/client.jar" "pack.png" -d "$INPUT_PATH"
+
+unzip -l "$TEMP_DOWNLOAD_DIR/client.jar" | grep -oP '^\s*\d+\s+\d+\s+\d+\s+(\S+)' | \
+  xargs -n 1 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
+    file="{}"
+    echo "Extracting \"$file\" from client.jar."
+
+    unzip -o "$TEMP_DOWNLOAD_DIR/client.jar" "$file" -d "$INPUT_PATH"
+    
+    if [ $? -eq 0 ]; then
+      echo "Successfully extracted \"$file\"."
+    else
+      echo "Failed to extract \"$file\"."
+    fi
+'
+
 echo "::endgroup::"
+
+
+# echo "::group:: Extract assets from client.jar"
+# unzip "$TEMP_DOWNLOAD_DIR/client.jar" "pack.png" -d "$INPUT_PATH"
+# unzip $TEMP_DOWNLOAD_DIR/client.jar "assets/*" -d "$INPUT_PATH"
+# echo "::endgroup::"
 
 echo "Fetch asset index URL from \"$package_url\"."
 asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
