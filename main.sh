@@ -47,7 +47,7 @@ echo "::group:: Parallel extract assets from client.jar"
 
 unzip "$TEMP_DOWNLOAD_DIR/client.jar" "pack.png" -d "$INPUT_PATH"
 
-zipinfo -1 "$TEMP_DOWNLOAD_DIR/client.jar" | \
+zipinfo -1 "$TEMP_DOWNLOAD_DIR/client.jar" | grep '^assets/' | \
   xargs -n 1 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
     file="{}"
     echo "Extracting \"$file\" from client.jar."
