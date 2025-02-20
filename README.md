@@ -1,6 +1,8 @@
 # generate-assets
 GitHub Action that generates Minecraft default resourcepack assets for a specified version.
 
+[![Test Action](https://github.com/MinecraftPlayground/generate-assets/actions/workflows/test_action.yml/badge.svg)](https://github.com/MinecraftPlayground/generate-assets/actions/workflows/test_action.yml)
+
 ## Usage
 
 ```yaml
