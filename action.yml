@@ -9,7 +9,7 @@ inputs:
   version: 
     description: 'Minecraft version to generate assets for.'
     required: false
-    default: 'latest'
+    default: 'latest-release'
 
   path:
     description: 'Relative path under $GITHUB_WORKSPACE to place the assets.'
