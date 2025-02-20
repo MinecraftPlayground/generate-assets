@@ -15,6 +15,7 @@ jobs:
         with:
           path: './default'
           version: '1.21.3'
+          parallel-downloads: 10
       
       - name: 'Upload generated assets'
         uses: actions/upload-artifact@v4
