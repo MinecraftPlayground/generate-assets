@@ -47,11 +47,12 @@ echo "::group:: Parallel extract assets from client.jar"
 
 unzip "$TEMP_DOWNLOAD_DIR/client.jar" "pack.png" -d "$INPUT_PATH"
 
-unzip -l "$TEMP_DOWNLOAD_DIR/client.jar" | grep -oP '^\s*\d+\s+\d+\s+\d+\s+(\S+)' | \
+zipinfo -1 "$TEMP_DOWNLOAD_DIR/client.jar" | \
   xargs -n 1 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
     file="{}"
     echo "Extracting \"$file\" from client.jar."
 
+    # Extrahiere die Datei parallel in das Zielverzeichnis
     unzip -o "$TEMP_DOWNLOAD_DIR/client.jar" "$file" -d "$INPUT_PATH"
     
     if [ $? -eq 0 ]; then
