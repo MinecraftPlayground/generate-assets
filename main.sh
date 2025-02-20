@@ -29,7 +29,7 @@ else
 fi
 
 echo "Make temp download directory."
-TEMP_DOWNLOAD_DIR=$(mktemp -d)
+export TEMP_DOWNLOAD_DIR=$(mktemp -d)
 
 echo "Fetch package URL from \"$INPUT_MANIFEST_API_URL\"."
 package_url=$(curl -L $INPUT_MANIFEST_API_URL | jq -r ".versions[] | select(.id == \"$INPUT_VERSION\") | .url")
