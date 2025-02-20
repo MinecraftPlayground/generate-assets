@@ -25,22 +25,31 @@ asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 echo "::group:: Downloading additional assets from \"$asset_index_url\"."
 assets_path="$INPUT_PATH/assets"
 
-curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"' | while read -r path hash; do
-  
-  mkdir -p "$assets_path/$(dirname $path)"
-  
+# Hole die Liste der Assets mit ihren URLs
+asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
+
+# Funktion für den parallelen Download eines einzelnen Assets
+download_asset() {
+  path=$1
+  hash=$2
   first_hex="${hash:0:2}"
-
   url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
-
   destination="$assets_path/$path"
+
+  mkdir -p "$(dirname "$destination")"
 
   if curl -f -s -o "$destination" "$url"; then
     echo "Saved \"$url\" to \"$destination\"."
   else
     echo "Failed to download \"$url\"."
   fi
-done
+}
+
+echo "$asset_list" | while read -r path hash; do
+  echo "$path $hash"
+done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
+  download_asset $(echo {} | awk "{print \$1}") $(echo {} | awk "{print \$2}")
+'
 
 echo "::endgroup::"
 
