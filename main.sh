@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$INPUT_VERSION" == "latest" ]; then
+if [ "$INPUT_VERSION" == "latest-snapshot" ]; then
   echo "Fetching the latest snapshot version."
   latest_version=$(curl -L $INPUT_MANIFEST_API_URL | jq -r '.latest.snapshot')
 
@@ -9,8 +9,21 @@ if [ "$INPUT_VERSION" == "latest" ]; then
     exit 1
   fi
 
-  echo "Using latest version: $latest_version"
+  echo "Using latest snapshot version: $latest_version"
   INPUT_VERSION="$latest_version"
+
+elif [ "$INPUT_VERSION" == "latest-release" ]; then
+  echo "Fetching the latest release version."
+  latest_version=$(curl -L $INPUT_MANIFEST_API_URL | jq -r '.latest.release')
+
+  if [ -z "$latest_version" ]; then
+    echo "Error: Could not find the latest release version in the manifest."
+    exit 1
+  fi
+
+  echo "Using latest release version: $latest_version"
+  INPUT_VERSION="$latest_version"
+
 else
   echo "Using specified version: $INPUT_VERSION"
 fi
