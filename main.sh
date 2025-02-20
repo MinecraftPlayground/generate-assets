@@ -50,7 +50,7 @@ echo "::endgroup::"
 echo "::group:: Iterate over downloaded files to find and unzip ZIP files."
 
 find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
-  unzip_dir="${zipfile%.zip}"
+  unzip_dir="${zipfile%.zip}_unzipped"
   
   echo "Unzipping \"$zipfile\" to \"$unzip_dir\"."
   
@@ -61,10 +61,14 @@ find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
   else
     echo "Failed to unzip \"$zipfile\"."
   fi
-
-  echo "Removing \"$zipfile\"."
   
-  rm $zipfile
+  echo "Removing \"$zipfile\"."
+  rm "$zipfile"
+  
+  original_name="${zipfile%.zip}"
+  echo "Renaming \"$unzip_dir\" to \"$original_name\"."
+  mv "$unzip_dir" "$original_name"
+
 done
 
 echo "::endgroup::"
