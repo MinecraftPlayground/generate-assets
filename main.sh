@@ -95,7 +95,7 @@ find "$INPUT_PATH" -type f -name "*.zip" | while read -r zipfile; do
   echo "Removing \"$zipfile\"."
   rm "$zipfile"
   
-  original_name="${zipfile%.zip}"
+  original_name="${zipfile%.zip}.zip"
   echo "Renaming \"$unzip_dir\" to \"$original_name\"."
   mv "$unzip_dir" "$original_name"
 
