@@ -5,7 +5,6 @@ GitHub Action that generates Minecraft default resourcepack assets for a specifi
 
 ```yaml
 jobs:
-  # Download assest
   download-assets:
     runs-on: ubuntu-latest
     steps:
