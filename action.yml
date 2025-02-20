@@ -25,6 +25,11 @@ inputs:
     required: false
     default: 'https://resources.download.minecraft.net'
 
+  parallel-downloads:
+    description: 'How much files to download in parallel.'
+    required: false
+    default: 5
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -33,3 +38,4 @@ runs:
     INPUT_PATH: ${{ inputs.path }}
     INPUT_MANIFEST_API_URL: ${{ inputs.api-url }}
     INPUT_RESOURCES_API_URL: ${{ inputs.resources-url }}
+    INPUT_PARALLEL_DOWNLOADS: ${{ inputs.parallel-downloads }}
