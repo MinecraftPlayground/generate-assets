@@ -53,6 +53,8 @@ asset_index_url=$(curl -L $package_url | jq -r ".assetIndex.url")
 echo "::group:: Downloading additional assets from \"$asset_index_url\"."
 assets_path="$INPUT_PATH/assets"
 
+echo "Saving additional assets to \"$assets_path\"."
+
 asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
 
 echo "$asset_list" | while read -r path hash; do
