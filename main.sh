@@ -37,10 +37,33 @@ package_url=$(curl -L $INPUT_MANIFEST_API_URL | jq -r ".versions[] | select(.id 
 echo "Fetch client.jar URL from \"$package_url\"."
 jar_url=$(curl -L $package_url | jq -r ".downloads.client.url")
 
+
+
+echo "Fetching client.jar SHA1 hash from \"$package_url\"."
+client_jar_sha1=$(curl -L $package_url | jq -r ".downloads.client.sha1")
+
 echo "Downloading client.jar from \"$jar_url\"."
 curl -L -o $TEMP_DOWNLOAD_DIR/client.jar $jar_url
 
+# Verify the SHA1 hash of the downloaded file
+echo "Verifying SHA1 hash of client.jar."
+downloaded_sha1=$(sha1sum "$TEMP_DOWNLOAD_DIR/client.jar" | awk '{print $1}')
+
+if [ "$downloaded_sha1" != "$client_jar_sha1" ]; then
+  echo "Error: SHA1 hash does not match. Expected $client_jar_sha1, but got $downloaded_sha1."
+  exit 1
+else
+  echo "SHA1 hash verification passed for client.jar."
+fi
+
 echo "Saved \"client.jar\" to \"$TEMP_DOWNLOAD_DIR\"."
+
+
+
+# echo "Downloading client.jar from \"$jar_url\"."
+# curl -L -o $TEMP_DOWNLOAD_DIR/client.jar $jar_url
+
+# echo "Saved \"client.jar\" to \"$TEMP_DOWNLOAD_DIR\"."
 
 echo "::group:: Extract assets from client.jar"
 unzip "$TEMP_DOWNLOAD_DIR/client.jar" "pack.png" -d "$INPUT_PATH"
