@@ -57,6 +57,7 @@ echo "Saving additional assets to \"$assets_path\"."
 
 asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
 
+env assets_path="$assets_path"
 echo "$asset_list" | while read -r path hash; do
   echo "$path $hash"
 done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
