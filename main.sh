@@ -73,7 +73,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
   else
     echo "Failed to download \"$url\"."
   fi
-'
+' env assets_path="$assets_path"
 
 echo "::endgroup::"
 
