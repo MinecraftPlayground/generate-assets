@@ -80,6 +80,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
   first_hex="${hash:0:2}"
   url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
   destination="$assets_path/$path"
+  failed_file="$1"
 
   mkdir -p "$(dirname "$destination")"
 
@@ -89,18 +90,18 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
   while [ $attempt -le $retries ]; do
     if curl -f -s -o "$destination" "$url"; then
       echo -e "Saved \"$url\" to \"$destination\"."
-      return 0
+      exit 0
     else
-      echo -e "\033[33m  Attempt $attempt/$retries failed for \"$url\"."
+      echo -e "\033[33m  Attempt $attempt/$retries failed for \"$url\".\033[0m"
       attempt=$((attempt + 1))
       sleep 1
     fi
   done
 
-  echo -e "\033[31m  Failed to download \"$url\" after $retries attempts."
-  echo "$url" >> "$FAILED_DOWNLOADS_FILE"
-  return 1
-'
+  echo -e "\033[31m  Failed to download \"$url\" after $retries attempts.\033[0m"
+  echo "$url" >> "$failed_file"
+  exit 1
+' _ "$FAILED_DOWNLOADS_FILE"
 
 echo "::endgroup::"
 
