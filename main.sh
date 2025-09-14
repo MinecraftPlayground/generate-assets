@@ -100,7 +100,6 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
 
   echo -e "\033[31mFailed to download \"$url\" after $retries attempts.\033[0m"
   echo "$url" >> "$failed_file"
-  exit 1
 ' _ "$FAILED_DOWNLOADS_FILE"
 
 echo "::endgroup::"
