@@ -70,9 +70,17 @@ echo "Saving additional assets to \"$assets_path\"."
 
 asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
 
-download_with_retries() {
-  url="$1"
-  destination="$2"
+echo "$asset_list" | while read -r path hash; do
+  echo "$path $hash"
+done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
+  path=$(echo {} | awk "{print \$1}")
+  hash=$(echo {} | awk "{print \$2}")
+  first_hex="${hash:0:2}"
+  url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
+  destination="$assets_path/$path"
+
+  mkdir -p "$(dirname "$destination")"
+
   retries="$INPUT_DOWNLOAD_RETRIES"
   attempt=1
 
@@ -89,20 +97,6 @@ download_with_retries() {
 
   echo "\033[31m  Failed to download \"$url\" after $retries attempts."
   return 1
-}
-
-echo "$asset_list" | while read -r path hash; do
-  echo "$path $hash"
-done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
-  path=$(echo {} | awk "{print \$1}")
-  hash=$(echo {} | awk "{print \$2}")
-  first_hex="${hash:0:2}"
-  url="$INPUT_RESOURCES_API_URL/$first_hex/$hash"
-  destination="$assets_path/$path"
-
-  mkdir -p "$(dirname "$destination")"
-
-  download_with_retries "$url" "$destination"
 '
 
 echo "::endgroup::"
