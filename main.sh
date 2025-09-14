@@ -88,18 +88,17 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
   attempt=1
 
   while [ $attempt -le $retries ]; do
-    echo -e "Saving \"$url\" to \"$destination\"."
-
     if curl -f -s -o "$destination" "$url"; then
+      echo -e "Saved \"$url\" to \"$destination\"."
       exit 0
     else
-      echo -e "\033[33m  Attempt $attempt/$retries failed for \"$url\".\033[0m"
+      echo -e "\033[33mAttempt $attempt/$retries failed for \"$url\".\033[0m"
       attempt=$((attempt + 1))
       sleep 1
     fi
   done
 
-  echo -e "\033[31m  Failed to download \"$url\" after $retries attempts.\033[0m"
+  echo -e "\033[31mFailed to download \"$url\" after $retries attempts.\033[0m"
   echo "$url" >> "$failed_file"
   exit 1
 ' _ "$FAILED_DOWNLOADS_FILE"
