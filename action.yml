@@ -29,7 +29,12 @@ inputs:
   parallel-downloads:
     description: 'How much files to download in parallel.'
     required: false
-    default: 5
+    default: '5'
+
+  download-retries:
+    description: 'How much times to retry a failed download.'
+    required: false
+    default: '3'
 
 runs:
   using: 'docker'
@@ -40,3 +45,4 @@ runs:
     INPUT_MANIFEST_API_URL: ${{ inputs.api-url }}
     INPUT_RESOURCES_API_URL: ${{ inputs.resources-url }}
     INPUT_PARALLEL_DOWNLOADS: ${{ inputs.parallel-downloads }}
+    INPUT_DOWNLOAD_RETRIES: ${{ inputs.download-retries }}

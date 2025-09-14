@@ -70,6 +70,27 @@ echo "Saving additional assets to \"$assets_path\"."
 
 asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
 
+download_with_retries() {
+  url="$1"
+  destination="$2"
+  retries="$INPUT_DOWNLOAD_RETRIES"
+  attempt=1
+
+  while [ $attempt -le $retries ]; do
+    if curl -f -s -o "$destination" "$url"; then
+      echo "\033[32mSaved \"$url\" to \"$destination\"."
+      return 0
+    else
+      echo "\033[33m  Attempt $attempt/$retries failed for \"$url\"."
+      attempt=$((attempt + 1))
+      sleep 1
+    fi
+  done
+
+  echo "\033[31m  Failed to download \"$url\" after $retries attempts."
+  return 1
+}
+
 echo "$asset_list" | while read -r path hash; do
   echo "$path $hash"
 done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
@@ -81,11 +102,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
 
   mkdir -p "$(dirname "$destination")"
 
-  if curl -f -s -o "$destination" "$url"; then
-    echo "Saved \"$url\" to \"$destination\"."
-  else
-    echo "Failed to download \"$url\"."
-  fi
+  download_with_retries "$url" "$destination"
 '
 
 echo "::endgroup::"
