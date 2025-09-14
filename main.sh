@@ -70,6 +70,8 @@ echo "Saving additional assets to \"$assets_path\"."
 
 asset_list=$(curl -L $asset_index_url | jq -r '.objects | to_entries[] | "\(.key) \(.value.hash)"')
 
+FAILED_DOWNLOADS_FILE=$(mktemp)
+
 echo "$asset_list" | while read -r path hash; do
   echo "$path $hash"
 done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
@@ -96,6 +98,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
   done
 
   echo -e "\033[31m  Failed to download \"$url\" after $retries attempts."
+  echo "$url" >> "$FAILED_DOWNLOADS_FILE"
   return 1
 '
 
@@ -128,5 +131,12 @@ done
 echo "::endgroup::"
 
 echo "All files downloaded and processed."
+
+if [ -s "$FAILED_DOWNLOADS_FILE" ]; then
+  failed_urls=$(jq -R -s -c 'split("\n")[:-1]' "$FAILED_DOWNLOADS_FILE")
+  echo "failed-downloads=$failed_urls" >> "$GITHUB_OUTPUT"
+else
+  echo "failed-downloads=[]" >> "$GITHUB_OUTPUT"
+fi
 
 exit 0

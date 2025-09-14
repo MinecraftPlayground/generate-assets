@@ -19,7 +19,7 @@ jobs:
           parallel-downloads: 10
 ```
 
-### Inputs 📥
+### Inputs
 
 | Input                | Required? | Default                                                           | Description                                                                            |
 | :------------------- | --------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
@@ -28,6 +28,13 @@ jobs:
 | `api-url`            | No        | `https://piston-meta.mojang.com/mc/game/version_manifest_v2.json` | URL to the Minecraft manifest API.                                                     |
 | `resources-url`      | No        | `https://resources.download.minecraft.net`                        | URL to the Minecraft resources API.                                                    |
 | `parallel-downloads` | No        | `5`                                                               | How much files to download in parallel.                                                |
+| `download-retries`   | No        | `3`                                                               | How much retries to download failed files.                                             |
+
+### Outputs
+
+| Output             | Description                           |
+| :----------------- | :------------------------------------ |
+| `failed-downloads` | List of URLs that failed to download. |
 
 ## License
 The scripts and documentation in this project are released under the [GPLv3 License](./LICENSE).
