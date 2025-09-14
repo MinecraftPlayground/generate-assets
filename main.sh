@@ -86,7 +86,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
 
   while [ $attempt -le $retries ]; do
     if curl -f -s -o "$destination" "$url"; then
-      echo -e "\033[32mSaved \"$url\" to \"$destination\"."
+      echo -e "Saved \"$url\" to \"$destination\"."
       return 0
     else
       echo -e "\033[33m  Attempt $attempt/$retries failed for \"$url\"."
