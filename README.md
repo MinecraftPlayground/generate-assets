@@ -20,10 +20,10 @@ jobs:
 
       - name: 'List failed downloads'
         run: |
-          FAILD_DOWNLOADS_FILES=${{ steps.download_assets.outputs.failed-downloads }}
-          if [ $FAILD_DOWNLOADS_FILES != "[]" ]; then
+          FAILED_DOWNLOADS_FILES=${{ steps.download_assets.outputs.failed-downloads }}
+          if [ $FAILED_DOWNLOADS_FILES != "[]" ]; then
             echo "Failed downloads:"
-            echo $FAILD_DOWNLOADS_FILES | jq '.[]'
+            echo $FAILED_DOWNLOADS_FILES | jq '.[]'
           else
             echo "No failed downloads."
           fi
