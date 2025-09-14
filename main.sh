@@ -130,10 +130,8 @@ done
 
 echo "::endgroup::"
 
-echo "All files downloaded and processed."
-
 if [ -s "$FAILED_DOWNLOADS_FILE" ]; then
-  echo "::group:: Some downloads failed:"
+  echo "::group:: Some downloads failed."
   cat "$FAILED_DOWNLOADS_FILE"
   echo "::endgroup::"
 
@@ -142,5 +140,7 @@ if [ -s "$FAILED_DOWNLOADS_FILE" ]; then
 else
   echo "failed-downloads=[]" >> "$GITHUB_OUTPUT"
 fi
+
+echo "All files downloaded and processed."
 
 exit 0
