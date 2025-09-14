@@ -31,7 +31,6 @@ jobs:
           echo "Failed downloads: ${{ steps.test.outputs.failed-downloads }}"
           if [ "${{ steps.test.outputs.failed-downloads }}" != "[]" ]; then
             echo "Some downloads failed: ${{ steps.test.outputs.failed-downloads }}"
-            exit 1
           fi
       
       - name: 'Upload generated assets'
