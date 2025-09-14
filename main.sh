@@ -133,8 +133,6 @@ echo "::endgroup::"
 echo "All files downloaded and processed."
 
 if [ -s "$FAILED_DOWNLOADS_FILE" ]; then
-  cat "$FAILED_DOWNLOADS_FILE" >&2
-
   failed_urls=$(jq -R -s -c 'split("\n")[:-1]' "$FAILED_DOWNLOADS_FILE")
   echo "failed-downloads=$failed_urls" >> "$GITHUB_OUTPUT"
 else
