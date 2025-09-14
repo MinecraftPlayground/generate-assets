@@ -133,8 +133,9 @@ echo "::endgroup::"
 echo "All files downloaded and processed."
 
 if [ -s "$FAILED_DOWNLOADS_FILE" ]; then
-  echo "Some downloads failed:"
+  echo "::group:: Some downloads failed:"
   cat "$FAILED_DOWNLOADS_FILE"
+  echo "::endgroup::"
 
   failed_urls=$(jq -R -s -c 'split("\n")[:-1]' "$FAILED_DOWNLOADS_FILE")
   echo "failed-downloads=$failed_urls" >> "$GITHUB_OUTPUT"
