@@ -10,13 +10,23 @@ jobs:
   download-assets:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Download assets to "./default_assets".'
+      - name: 'Download assets to "./default_assets"'
         id: download_assets
         uses: MinecraftPlayground/generate-assets@latest
         with:
           version: 1.21.2
           path: './default_assets'
           parallel-downloads: 10
+
+      - name: 'List failed downloads'
+        run: |
+          FAILD_DOWNLOADS_FILES=${{ steps.download_assets.outputs.failed-downloads }}
+          if [ $FAILD_DOWNLOADS_FILES != "[]" ]; then
+            echo "Failed downloads:"
+            echo $FAILD_DOWNLOADS_FILES | jq '.[]'
+          else
+            echo "No failed downloads."
+          fi
 ```
 
 ### Inputs
