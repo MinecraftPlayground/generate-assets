@@ -1,5 +1,12 @@
 name: 'Test Action'
 on:
+  workflow_dispatch:
+    inputs:
+      download_retries:
+        type: string
+        description: 'How much times to retry a failed download.'
+        required: false
+
   push:
     branches: ['main']
 
@@ -17,6 +24,7 @@ jobs:
           path: './default'
           version: 'latest-snapshot'
           parallel-downloads: 10
+          download-retries: '${{ github.event.inputs.download_retries || 3 }}'
         
       - name: 'List failed downloads'
         run: |
