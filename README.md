@@ -7,12 +7,12 @@ GitHub Action that generates Minecraft default resourcepack assets for a specifi
 
 ```yaml
 jobs:
-  download-assets:
+  generate-assets:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Download assets to "./default_assets"'
-        id: download_assets
-        uses: MinecraftPlayground/generate-assets@latest
+      - name: 'Generate assets to "./default_assets"'
+        id: generate_assets
+        uses: MinecraftPlayground/generate-assets@main
         with:
           version: 1.21.2
           path: './default_assets'
@@ -20,7 +20,7 @@ jobs:
 
       - name: 'List failed downloads'
         run: |
-          FAILED_DOWNLOADS_FILES=${{ steps.download_assets.outputs.failed-downloads }}
+          FAILED_DOWNLOADS_FILES=${{ steps.generate_assets.outputs.failed-downloads }}
           if [ $FAILED_DOWNLOADS_FILES != "[]" ]; then
             echo "Failed downloads:"
             echo $FAILED_DOWNLOADS_FILES | jq '.[]'
