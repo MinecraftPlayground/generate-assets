@@ -93,7 +93,7 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
       # pack.mcmeta is special: move it from assets/ to the <root>
       if [ "$path" = "pack.mcmeta" ]; then
         mv "$destination" "$INPUT_PATH/pack.mcmeta"
-        echo -e "Saved \"$destination\" to \"$INPUT_PATH/pack.mcmeta\". \033[33m(special case, pack.mcmeta needs to be moved to the <root>)\033[0m"
+        echo -e "Saved \"$url\" to \"$INPUT_PATH/pack.mcmeta\". \033[33m(special case, pack.mcmeta needs to be moved to the <root>)\033[0m"
       else
         echo -e "Saved \"$url\" to \"$destination\"."
       fi
