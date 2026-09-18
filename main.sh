@@ -89,7 +89,15 @@ done | xargs -n 2 -P "$INPUT_PARALLEL_DOWNLOADS" -I {} sh -c '
 
   while [ $attempt -le $retries ]; do
     if curl -f -s -o "$destination" "$url"; then
-      echo -e "Saved \"$url\" to \"$destination\"."
+    
+      # pack.mcmeta is special: move it from assets/ to the <root>
+      if [ "$path" = "pack.mcmeta" ]; then
+        mv "$destination" "$INPUT_PATH/pack.mcmeta"
+        echo -e "Saved \"$destination\" to \"$INPUT_PATH/pack.mcmeta\". \033[33m(special case, pack.mcmeta needs to be moved to the <root>)\033[0m"
+      else
+        echo -e "Saved \"$url\" to \"$destination\"."
+      fi
+      
       exit 0
     else
       echo -e "\033[33mAttempt $attempt/$retries failed for \"$url\".\033[0m"
